@@ -70,6 +70,7 @@ function collectArrows(fragment) {
   for (const tag of fragment.matchAll(/<(path|line)\b[^>]*>/gi)) {
     const raw = tag[0];
     if (!/\bclass="[^"]*\ba-(?:default|emphasis|security|dashed)\b/.test(raw)) continue;
+    if (!/\bmarker-end=/.test(raw)) continue;
     const attrs = parseAttrs(raw);
     const segments = tag[1].toLowerCase() === 'line'
       ? lineSegments(attrs)

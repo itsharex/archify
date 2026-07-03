@@ -39,3 +39,29 @@ jobs:
             echo '::error::archify.zip is stale — run scripts/build-zip.sh and commit the result'
             exit 1
           fi
+
+  package-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install and validate packaged skill
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/archify-package
+          mkdir -p /tmp/archify-package
+          unzip -q archify.zip -d /tmp/archify-package
+          cd /tmp/archify-package/archify
+          npm ci --no-audit --no-fund
+
+          node bin/archify.mjs --help
+          node bin/archify.mjs render workflow examples/agent-tool-call.workflow.json /tmp/workflow.html
+          node bin/archify.mjs check /tmp/workflow.html
+
+          node bin/archify.mjs validate architecture examples/web-app.architecture.json --json
+          node bin/archify.mjs validate workflow examples/agent-tool-call.workflow.json --json
+          node bin/archify.mjs validate sequence examples/cache-miss-request.sequence.json --json
+          node bin/archify.mjs validate dataflow examples/product-analytics.dataflow.json --json
+          node bin/archify.mjs validate lifecycle examples/agent-run.lifecycle.json --json
