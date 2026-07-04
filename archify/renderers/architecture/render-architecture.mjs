@@ -6,6 +6,8 @@ import {
   asArray,
   isFinitePoint,
   rectsOverlap,
+  suggestLabelObstacleFix,
+  suggestComponentSeparation,
   anchor,
   defaultFromSide,
   defaultToSide,
@@ -131,7 +133,7 @@ function validateArchitecture() {
   for (let i = 0; i < list.length; i += 1) {
     for (let j = i + 1; j < list.length; j += 1) {
       if (rectsOverlap(list[i], list[j], 8)) {
-        problems.push(`Components "${list[i].id}" and "${list[j].id}" are less than 8px apart — move one or shrink its size.`);
+        problems.push(`Components "${list[i].id}" and "${list[j].id}" are less than 8px apart — move one or shrink its size.\n${suggestComponentSeparation(list[i], list[j], 8)}`);
       }
     }
   }
@@ -165,12 +167,12 @@ function validateArchitecture() {
     if (!conn.label || !components.has(conn.from) || !components.has(conn.to)) continue;
     const [lx, ly] = labelPoint(conn, pathFor(conn).points);
     const w = Math.max(30, textUnits(conn.label) * 4.8 + 10);
-    labelRects.push({ label: conn.label, x: lx - w / 2, y: ly - 10, width: w, height: 14 });
+    labelRects.push({ label: conn.label, x: lx - w / 2, y: ly - 10, width: w, height: 14, lx, ly });
   }
   for (const rect of labelRects) {
     for (const c of components.values()) {
       if (rectsOverlap(rect, c, -2)) {
-        problems.push(`Label "${rect.label}" overlaps component "${c.id}" — adjust labelDx/labelDy/labelSegment or set labelAt.`);
+        problems.push(`Label "${rect.label}" overlaps component "${c.id}" — adjust labelDx/labelDy/labelSegment or set labelAt.\n${suggestLabelObstacleFix(rect, rect.lx, rect.ly, c)}`);
       }
     }
   }

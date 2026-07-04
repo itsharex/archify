@@ -114,6 +114,8 @@ const CASES = [
     (d) => { d.boundaries[0].wraps.push('ghost'); }, ['wraps unknown component "ghost"']],
   ['architecture: label wider than component', 'architecture',
     (d) => { d.components[0].label = 'An Extremely Long Component Label Overflow'; }, ['wider than component', 'shorten the label']],
+  ['architecture: component overlap suggests fix', 'architecture',
+    (d) => { d.components[1].pos = [...d.components[0].pos]; }, ['Suggested fix', 'move "']],
 ];
 
 for (const [name, mode, mutate, expected] of CASES) {

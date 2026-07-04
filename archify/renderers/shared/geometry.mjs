@@ -188,3 +188,43 @@ export function variantAccent(variant, { dashed = 't-messagebus' } = {}) {
         ? dashed
         : 't-muted';
 }
+
+export function formatRect(r) {
+  return `[${Math.round(r.x)}, ${Math.round(r.y)}, ${Math.round(r.width)}, ${Math.round(r.height)}]`;
+}
+
+function formatDelta(n) {
+  const v = Math.round(n);
+  return v >= 0 ? `+${v}` : String(v);
+}
+
+/** Actionable hint when an edge label rect hits a node/component box (#7). */
+export function suggestLabelObstacleFix(labelRect, lx, ly, obstacle, obstacleKind = 'component') {
+  const lxR = Math.round(lx);
+  const lyR = Math.round(ly);
+  const belowY = Math.round(obstacle.y + obstacle.height + 14);
+  const aboveY = Math.round(obstacle.y - 4);
+  return [
+    `  label rect: ${formatRect(labelRect)}`,
+    `  ${obstacleKind} "${obstacle.id}" rect: ${formatRect(obstacle)}`,
+    `  Suggested fix: labelAt [${lxR}, ${belowY}] or labelDy ${formatDelta(belowY - lyR)} (below); or labelAt [${lxR}, ${aboveY}] or labelDy ${formatDelta(aboveY - lyR)} (above)`,
+  ].join('\n');
+}
+
+/** Hint when two edge labels collide. */
+export function suggestLabelPairFix(a, b) {
+  return [
+    `  "${a.label}" ${formatRect(a)}; "${b.label}" ${formatRect(b)}`,
+    '  Suggested fix: add labelDy +24 on one edge, adjust labelDx, or remove one label',
+  ].join('\n');
+}
+
+/** Hint when two components/nodes are too close. */
+export function suggestComponentSeparation(a, b, minGap = 8) {
+  const rightX = Math.round(a.x + a.width + minGap);
+  const belowY = Math.round(a.y + a.height + minGap);
+  return [
+    `  "${a.id}" ${formatRect(a)}; "${b.id}" ${formatRect(b)}`,
+    `  Suggested fix: move "${b.id}" pos to [${rightX}, ${Math.round(b.y)}] (right of "${a.id}") or [${Math.round(b.x)}, ${belowY}] (below)`,
+  ].join('\n');
+}

@@ -4,6 +4,10 @@ All notable changes are documented here. Format loosely follows [Keep a Changelo
 
 ## [Unreleased]
 
+### Added
+- **Layout principles in SKILL.md** — main-path-first guidance, side-branch rules, and pointers to `archify-repo` / `maka-architecture` examples.
+- **Validator fix suggestions (#7)** — label overlap and component proximity errors now include rects plus concrete `labelAt` / `labelDy` or `pos` nudges.
+
 ## [2.9.0] — 2026-07-05
 
 ### Added

@@ -6,6 +6,8 @@ import {
   asArray,
   isFinitePoint,
   rectsOverlap,
+  suggestLabelObstacleFix,
+  suggestLabelPairFix,
   anchor,
   defaultFromSide,
   defaultToSide,
@@ -138,19 +140,19 @@ function validateDataflow() {
     const longestLine = Math.max(textUnits(flow.label), textUnits(flow.classification || ''));
     const width = Math.max(34, longestLine * 4.9 + 12);
     const height = flow.classification ? 27 : layout.labelH;
-    labelRects.push({ label: flow.label, x: lx - width / 2, y: ly - 11, width, height });
+    labelRects.push({ label: flow.label, x: lx - width / 2, y: ly - 11, width, height, lx, ly });
   }
   for (const rect of labelRects) {
     for (const node of nodes.values()) {
       if (rectsOverlap(rect, node, -2)) {
-        problems.push(`Label "${rect.label}" overlaps node "${node.id}" — adjust labelDx/labelDy/labelSegment or set labelAt.`);
+        problems.push(`Label "${rect.label}" overlaps node "${node.id}" — adjust labelDx/labelDy/labelSegment or set labelAt.\n${suggestLabelObstacleFix(rect, rect.lx, rect.ly, node, 'node')}`);
       }
     }
   }
   for (let i = 0; i < labelRects.length; i += 1) {
     for (let j = i + 1; j < labelRects.length; j += 1) {
       if (rectsOverlap(labelRects[i], labelRects[j], -2)) {
-        problems.push(`Labels "${labelRects[i].label}" and "${labelRects[j].label}" overlap — adjust labelDx/labelDy.`);
+        problems.push(`Labels "${labelRects[i].label}" and "${labelRects[j].label}" overlap — adjust labelDx/labelDy.\n${suggestLabelPairFix(labelRects[i], labelRects[j])}`);
       }
     }
   }

@@ -50,6 +50,20 @@ When the user pastes Mermaid code, do NOT try to render or parse it mechanically
 
 Drop Mermaid styling; keep only the topology and meaning. You choose grouping, lane order, and what deserves emphasis — that judgment is the product.
 
+## Layout principles (read before placing)
+
+Archify's readability comes from **spatial narrative**, not from drawing every dependency as an arrow. Before you write coordinates or edge lists, plan one clear story:
+
+1. **One main path** — left → right (architecture) or lane → column (workflow). The reader should trace the happy path without crossing lines.
+2. **Few labeled edges** — label only cross-boundary or non-obvious transitions on the main path. Adjacent steps stay unlabeled.
+3. **Short side branches** — permissions, storage, bots, CI: connect **up or down** from the nearest node on the main path. Never route a secondary edge diagonally across unrelated components.
+4. **Cards for detail** — policies, tech stack notes, and "also connects to X" belong in summary cards, not as extra arrows.
+5. **Mode fit** — process / approval / tool-call stories → `workflow` or `sequence`. Component maps with ≤12 nodes → `architecture`. If the diagram needs 20+ edges, remove edges until the main path is obvious.
+
+Worked examples on this pattern: `examples/archify-repo.architecture.json` (this repo) and `examples/maka-architecture.architecture.json` (third-party desktop app).
+
+When validation fails on label overlap, read the **Suggested fix** lines (coordinates / `labelAt` / `labelDy`) and apply them directly — do not guess offsets blindly.
+
 ## Renderer Modes (architecture / workflow / sequence / dataflow / lifecycle)
 
 All five modes follow the same loop:
