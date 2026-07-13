@@ -99,6 +99,12 @@ expectFailure('cross-lane state overlap', 'lifecycle',
     delete failed.yOffset;
     failed.col = approval.col;
   }, 'less than 10px apart');
+expectFailure('zero component width rejected by schema', 'architecture',
+  (d) => { d.components[0].size = [0, 60]; }, '/components/0/size/0');
+expectFailure('zero component height rejected by schema', 'architecture',
+  (d) => { d.components[0].size = [120, 0]; }, '/components/0/size/1');
+expectFailure('negative component width rejected by schema', 'architecture',
+  (d) => { d.components[0].size = [-1, 60]; }, '/components/0/size/0');
 
 // ---------------------------------------------------------------------------
 console.log('template freshness (architecture example must carry the current template)');
