@@ -1,6 +1,7 @@
 ![Archify product preview](docs/assets/archify-readme-hero.png)
 
 # Archify
+<a href="https://trendshift.io/repositories/31352?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-31352" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/repositories/31352" alt="tt-a1i%2Farchify | Trendshift" width="250" height="55"/></a>
 
 **Generate beautiful architecture, technical workflow, sequence, data-flow, and lifecycle diagrams in chat. Switch dark / light. Copy to clipboard or export crisp up-to-4× PNG / JPEG / WebP / SVG.**
 
