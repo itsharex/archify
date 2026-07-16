@@ -4,12 +4,17 @@ All notable changes are documented here. Format loosely follows [Keep a Changelo
 
 ## [Unreleased]
 
+## [2.11.0] — 2026-07-16
+
 ### Added
 - **Zero-install schema validation.** All five JSON Schemas are compiled at development time into committed standalone ESM validators. Installed skills now enforce the full schema contract without `npm install`, `node_modules`, or a network connection; CI verifies the packaged ZIP rejects invalid input in this dependency-free state.
 - **First-run CLI commands.** `archify doctor` checks the installed runtime surface, and `archify demo [output-directory]` generates a ready-to-open example plus the next render command.
 
 ### Changed
 - **60-second quick start.** README and GitHub Pages now lead with `npx skills add tt-a1i/archify -g`, a temporary `skills use` path, and three copy-ready prompts before the manual ZIP instructions.
+
+### Fixed
+- **Packaged CLI and validation hardening ([#21](https://github.com/tt-a1i/archify/pull/21)).** Installed ZIPs now keep `archify examples` on the packaged path, enforce standalone schema validation without development dependencies, and cover the clean-consumer CLI flow in CI. Thanks to [@ShiroKSH](https://github.com/ShiroKSH).
 
 ## [2.10.0] — 2026-07-05
 
